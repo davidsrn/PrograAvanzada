@@ -1,0 +1,24 @@
+--------------------------------------------------------
+Name: lab1
+
+Path: ..
+
+Last Access: Sun Sep 02 13:42:57 2018
+
+Last Modification: Fri Aug 17 09:30:10 2018
+--------------------------------------------------------
+Name: lab2
+
+Path: ..
+
+Last Access: Sun Sep 02 13:43:13 2018
+
+Last Modification: Fri Aug 24 10:39:32 2018
+--------------------------------------------------------
+Name: lab3
+
+Path: ..
+
+Last Access: Sun Sep 02 14:15:39 2018
+
+Last Modification: Sun Sep 02 14:15:39 2018
