@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
         char out_filename[PATH_MAX + NAME_MAX + 1];
         FILE *fd_in;
         FILE *fd_out;
-        int time, inter, size, i, line=0;
+        int time, inter, i, line=0;
         float num;
         float min, max;
         min=INT_MAX;
@@ -75,8 +75,7 @@ int main(int argc, char *argv[]){
                                         min=INT_MAX;
                                         max=INT_MIN;
                                         // printf("%i\n", line);
-                                        size=inter * inter;
-                                        for (i=0; i < 626; i++){
+                                        for (i=0; i < 625; i++){
                                                 fscanf(fd_in, ",%f", &num);
                                                 nums[i]=(float)num;
                                                 if(nums[i] < min){
@@ -100,10 +99,9 @@ int main(int argc, char *argv[]){
                                 // fd_out=fopen(outputfile, "w");
                                 while (fscanf(fd_in, "%i,%i", &time, &inter) !=EOF){
                                         fprintf(fd_out, "%i,%i", time, inter);
-                                        size=inter * inter;
                                         // printf("%s\n", "working");
                                         line++;
-                                        for (i=0; i < 626; i++){
+                                        for (i=0; i < 625; i++){
                                                 // printf("MAX:%f MIN:%f\n", maxarg[line], minarg[line]);
                                                 // printf("%.2f\t", num);
                                                 fscanf(fd_in, ",%f", &num);
