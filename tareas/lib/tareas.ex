@@ -21,7 +21,7 @@ defmodule Tareas do
 
     rdir = hd(args)
 
-    files = Path.wildcard("#{rdir}/*")
+    files = Path.wildcard("#{rdir}/*.c")
 
     System.cmd("sshpass", ["-p", "alumno", "ssh", "alumno@192.168.56.101", "rm /home/alumno/#{vdir}/*"])
 
@@ -36,11 +36,14 @@ defmodule Tareas do
                   "cp /home/alumno/#{vdir}/#{filename} /home/alumno/grading/simple.c;
                   cp /home/alumno/files/Makefile /home/alumno/grading/Makefile;
                   cd /home/alumno/grading;
-                  make;
+                  echo \"-----------------------------------\" >> /home/alumno/results/#{filename}.txt;
                   echo #{password} | sudo -S insmod simple.ko;
                   echo #{password} | sudo -S rmmod -f simple;
                   echo \"-----------------------------------\" >> /home/alumno/results/#{filename}.txt;
                   echo \"FILENAME: #{filename}\" >> /home/alumno/results/#{filename}.txt;
+                  echo \"-----------------------------------\" >> /home/alumno/results/#{filename}.txt;
+                  echo \"MAKE MSG:\" >> /home/alumno/results/#{filename}.txt;
+                  make >> /home/alumno/results/#{filename}.txt;
                   echo \"-----------------------------------\" >> /home/alumno/results/#{filename}.txt;
                   echo \"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\" >> /home/alumno/results/#{filename}.txt;
                   cat /home/alumno/#{vdir}/#{filename} >> /home/alumno/results/#{filename}.txt;
@@ -50,7 +53,6 @@ defmodule Tareas do
                   echo #{password} | sudo -S dmesg -c >> /home/alumno/results/#{filename}.txt;
                   echo \"-----------------------------------\" >> /home/alumno/results/#{filename}.txt;
                   rm /home/alumno/grading/*;
-                  cat /home/alumno/results.txt;
                   "])
     end
   end
