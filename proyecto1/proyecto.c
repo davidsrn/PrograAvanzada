@@ -1,16 +1,17 @@
 /*----------------------------------------------------------------
 
- *
+*
 
- * Programación avanzada: Normalización de un archivo
+* Programación avanzada: Problema del barbero.
 
- * Fecha: 30-Ago-2018
+* Fecha: 22-Sept-2018
 
- * Autor(es): A01206423 David Ramirez
+* Autor: A01206423 davidsrn
 
- *
+*
 
- *--------------------------------------------------------------*/
+*--------------------------------------------------------------*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
