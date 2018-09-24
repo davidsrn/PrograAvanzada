@@ -1,3 +1,16 @@
+/*----------------------------------------------------------------
+
+*
+
+* Programación avanzada: Manejando señales
+
+* Fecha: 22-Sept-2018
+
+* Autor: A01206423 davidsrn
+
+*
+
+*--------------------------------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
