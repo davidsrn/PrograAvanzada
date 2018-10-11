@@ -1,69 +1,84 @@
+/*
+  RESULTADOS:
+  w1 = 22.048668, w2 = 56.033065, w3 = 76.312976
+  Last train time = 310
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <limits.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
 #include <time.h>
-#include <pwd.h>
-#include <grp.h>
-#include <string.h>
-#include <errno.h>
-#include <ctype.h>
 #include <math.h>
+#include <unistd.h>
 
-int population = 40000;
-double lambda[3] = {6000, 10500, 8100}, miuT = 3600;
-double timePassed = 0;
+int customers = 35000;
+double lambda_turnstiles = 100;
+double miu_turnstiles = 60;
+double miu_train = 120;
 
-int main(int argc, char* argv[]) {
+
+int main() {
+  int i;
+  double* a_time = malloc(customers * sizeof(double));
+  double* s_time = malloc(customers * sizeof(double));
+  double* s_start = malloc(customers * sizeof(double));
+  double* s_ends = malloc(customers * sizeof(double));
+  // double* train_s_time = malloc(customers * sizeof(double));
+  double* train_s_ends = malloc(customers * sizeof(double));
+  double* w = malloc(customers * sizeof(double));
+  double w1 = 0, w2 = 0, w3 = 0;
+  int c1 = 0, c2 = 0, c3 = 0, capacity =0;
+
   srand(time(0));
-  int i = 0, i_break;
-  int currentLambda = 0;
-  double aTime = 0;
-  double ssTime = 0;
-  double sstart = 0, sends = 0, w=0, wq, w1=0, w2=0, w3=0, this_time;
 
-  for(i = 0; i < population; i++) {
-    if(timePassed >= 60 && currentLambda < 2) {
-      currentLambda++;
+  for(i = 0; i < customers; i++) {
+    if(i == 0){
+      a_time[0] = 0;
+      s_start[0] = 0;
     }
-    if(timePassed > 2*60){
-      miuT = 4800;
+    if(a_time[i-1] >= 60 && a_time[i-1] < 120) {
+      lambda_turnstiles = 175;
+      c2++;
+      miu_turnstiles = 140;
     }
-    // printf("timePassed = %lf, Wq = %lf\n", timePassed, wq);
-    if(i != 0) {
-      aTime = aTime - ((1/lambda[currentLambda]) * log((rand() + 1.0) / (RAND_MAX+2.0)));
-      if(sends < aTime){
-        sstart = aTime;
-      }else{
-        sstart = sends;
-      }
+    if(a_time[i-1] >= 120) {
+      lambda_turnstiles = 135;
+      c3++;
     }
-    ssTime = (1/miuT) * log(rand());
-    sends= ssTime + sstart;
-    // printf("aTime: %lf, ssTime: %lf, sends: %lf, sstart: %lf, Lambda: %.1lf\n", aTime, ssTime, sends, sstart, lambda[currentLambda]);
-    w = sends - aTime;
-    wq = sstart - aTime;
-    timePassed += w;
-    if(currentLambda == 0){
-      i_break = i + 1;
-      w1 = timePassed / i_break;
-      this_time = timePassed;
-    } else if (currentLambda == 1){
-      w2 = (timePassed - this_time) / (i + 1 - i_break);
-      this_time = timePassed;
-      i_break = i + 1;
-    } else if (currentLambda == 2){
-      w3 = (timePassed - this_time) / (i + 1 - i_break);
-      this_time = timePassed;
-      i_break = i + 1;
+    a_time[i] = a_time[i-1] - (1/lambda_turnstiles) *log(rand() * 1.0 / RAND_MAX);
+    s_start[i] = a_time[i] > s_ends[i-1] ? a_time[i] : s_ends[i-1];
+    s_time[i] = (-1.0/miu_turnstiles) * log(rand() * 1.0 / RAND_MAX);
+    s_ends[i] = s_time[i] + s_start[i];
+
+    // train_s_time[i] = 10;
+    // train_s_ends[i] = train_s_time[i] + s_ends[i];
+    capacity++;
+    if(capacity < 1200){
+      train_s_ends[i] = s_ends[i];
+    } else {
+      train_s_ends[i] = 10 + s_ends[i];
+      capacity = 0;
     }
-    printf("timePassed %lf, this_time %lf, i %i, i_break %i\n", timePassed, this_time, i, i_break);
-    // printf("W = %lf, Wq = %lf\n", w, wq);
+    w[i] = train_s_ends[i] - a_time[i];
+
   }
-  printf("w1 %lf, w2 %lf, w3 %lf\n", w1, w2, w3);
+  printf("%lf\n", floor(train_s_ends[34999]));
+
+  c1 = customers - (c2 + c3);
+  for(i = 0; i < customers; i++) {
+    if(i < c1) {
+      w1 += w[i];
+    }
+    if(i >= c1 && i < c1+c2) {
+      w2+=w[i];
+    } else {
+      w3 +=w[i];
+    }
+
+  }
+
+  w1 /= c1;
+  w2 /= c2;
+  w3 /= c3;
+  printf("w1 %lf, w2 %lf, w3 %lf, \n", w1, w2+5, w3+12);
   return 0;
 }
