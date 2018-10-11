@@ -32,8 +32,8 @@ void a_hidrogen(char* program) {
     sem_signal(semid, BARRIER, 3);
     printf("Water molecule created with  %i oxygen molecule and %i hidrogen molecules \n\n", semctl(semid, OXYGEN, GETVAL, 0), semctl(semid, HIDROGEN, GETVAL, 0));
 		// sleep(3);
-    semctl(semid, OXYGEN, SETVAL, 0);
-    semctl(semid, HIDROGEN, SETVAL, 0);
+    // semctl(semid, OXYGEN, SETVAL, 0);
+    // semctl(semid, HIDROGEN, SETVAL, 0);
 		flag = 0;
   }
 	sleep(3);
