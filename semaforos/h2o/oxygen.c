@@ -1,7 +1,7 @@
 #include "header.h"
 
 void a_oxygen(char* program) {
-	int semid, flag=1;
+	int semid;
 	key_t key;
 
 	if ( (key = ftok("/dev/null", 65)) == (key_t) -1 ) {
@@ -13,6 +13,7 @@ void a_oxygen(char* program) {
 		perror(program);
 		exit(-1);
 	}
+
   printf("Oxygen %i trying to enter the barrier.\n", getpid());
 	mutex_wait(semid, MUTEX);
 	printf("Oxygen %i trying to get in the barrier with %i space(s)\n", getpid(), semctl(semid, BARRIER, GETVAL, 0));
@@ -32,9 +33,8 @@ void a_oxygen(char* program) {
     sem_signal(semid, BARRIER, 3);
     printf("Water molecule created with  %i oxygen molecule and %i hidrogen molecules \n\n", semctl(semid, OXYGEN, GETVAL, 0), semctl(semid, HIDROGEN, GETVAL, 0));
 		// sleep(3);
-    // semctl(semid, OXYGEN, SETVAL, 0);
-    // semctl(semid, HIDROGEN, SETVAL, 0);
-		flag = 0;
+    semctl(semid, OXYGEN, SETVAL, 0);
+    semctl(semid, HIDROGEN, SETVAL, 0);
   }
 	sleep(3);
 	mutex_signal(semid, MUTEX);
